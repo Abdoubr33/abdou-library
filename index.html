@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moonlight Library</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Georgia, serif;
+    color: white;
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(4,6,20,.70), rgba(3,5,15,.96)),
+        url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2400&q=90")
+        center/cover fixed;
+}
+
+/* HEADER */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 20px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(7,8,22,.78);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #ffffff18;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: #9e8cff;
+}
+
+.music button {
+    border: none;
+    padding: 11px 18px;
+    border-radius: 30px;
+    background: #8069ff;
+    color: white;
+    cursor: pointer;
+}
+
+/* HERO */
+
+.hero {
+    text-align: center;
+    padding: 90px 20px 70px;
+}
+
+.hero h1 {
+    font-size: clamp(48px, 8vw, 90px);
+    line-height: .95;
+    text-shadow: 0 10px 40px #000;
+}
+
+.hero h1 span {
+    color: #a99aff;
+}
+
+.hero p {
+    max-width: 650px;
+    margin: 25px auto;
+    color: #ccc9dc;
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+/* SEARCH */
+
+.search {
+    width: min(800px,90%);
+    margin: 0 auto 35px;
+}
+
+.search input {
+    width: 100%;
+    padding: 19px 25px;
+    border-radius: 40px;
+    border: 1px solid #ffffff22;
+    outline: none;
+    background: #111329dd;
+    color: white;
+    font-size: 17px;
+}
+
+/* CATEGORIES */
+
+.categories {
+    width: 92%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    justify-content: center;
+}
+
+.category {
+    border: 1px solid #ffffff20;
+    background: #14162ddd;
+    color: #ccc;
+    padding: 9px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.category.active,
+.category:hover {
+    background: #8069ff;
+    color: white;
+}
+
+/* LIBRARY */
+
+.library-title {
+    text-align: center;
+    margin: 60px 0 35px;
+}
+
+.library-title h2 {
+    font-size: 42px;
+}
+
+.library-title p {
+    color: #aaa;
+    margin-top: 8px;
+}
+
+#bookCount {
+    color: #a99aff;
+}
+
+.library {
+    width: 92%;
+    max-width: 1600px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
+    gap: 30px;
+    padding-bottom: 100px;
+}
+
+/* BOOK */
+
+.book {
+    height: 330px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.book-inner {
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: .55s;
+}
+
+.book:hover .book-inner {
+    transform: rotateY(-15deg) rotateX(4deg) translateY(-12px);
+}
+
+.cover {
+    height: 100%;
+    padding: 18px;
+    border-radius: 5px 12px 12px 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 10px 15px 30px #000b;
+    position: relative;
+    overflow: hidden;
+}
+
+.cover::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px solid #ffffff35;
+}
+
+.icon {
+    font-size: 43px;
+    text-align: center;
+}
+
+.bookTitle {
+    text-align: center;
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.author {
+    text-align: center;
+    font-size: 12px;
+    opacity: .75;
+}
+
+.genre {
+    text-align: center;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: .7;
+}
+
+/* READER */
+
+.reader {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: #080912;
+    overflow-y: auto;
+}
+
+.reader.show {
+    display: block;
+}
+
+.reader-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 18px 5%;
+    background: #0c0d1bdd;
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #ffffff15;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.closeReader {
+    border: none;
+    background: #8069ff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.reader-content {
+    width: min(850px,90%);
+    margin: 60px auto 120px;
+}
+
+.reader-content h1 {
+    font-size: 48px;
+    color: #b1a4ff;
+    margin-bottom: 12px;
+}
+
+.reader-author {
+    color: #888;
+    margin-bottom: 50px;
+}
+
+.chapter {
+    margin-bottom: 60px;
+}
+
+.chapter h2 {
+    font-size: 30px;
+    margin-bottom: 25px;
+    color: #ddd;
+}
+
+.chapter p {
+    color: #d1cfda;
+    font-size: 19px;
+    line-height: 2;
+    margin-bottom: 22px;
+}
+
+.reader-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 60px;
+}
+
+.reader-controls button {
+    padding: 12px 22px;
+    border-radius: 30px;
+    border: 1px solid #ffffff20;
+    background: #17182ddd;
+    color: white;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    border-top: 1px solid #ffffff10;
+}
+
+@media(max-width:600px) {
+
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .library {
+        grid-template-columns: repeat(2,1fr);
+        gap: 16px;
+    }
+
+    .book {
+        height: 280px;
+    }
+
+    .reader-content h1 {
+        font-size: 35px;
+    }
+
+    .reader-content p {
+        font-size: 17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        MOONLIGHT <span>LIBRARY</span>
+    </div>
+
+    <div class="music">
+        <button id="musicBtn">🎵 Play Music</button>
+
+        <audio id="music" loop>
+            <source src="chill.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <h1>
+        Your world of<br>
+        <span>stories.</span>
+    </h1>
+
+    <p>
+        Choose a book, open it, and start reading.
+        1,000 original stories are waiting for you.
+    </p>
+
+</section>
+
+
+<div class="search">
+
+    <input
+        id="search"
+        placeholder="🔎 Search books, authors or genres..."
+    >
+
+</div>
+
+
+<div class="categories" id="categories"></div>
+
+
+<div class="library-title">
+
+    <h2>📚 Library</h2>
+
+    <p>
+        <span id="bookCount">1000</span>
+        readable books
+    </p>
+
+</div>
+
+
+<div class="library" id="library"></div>
+
+
+<footer>
+    🌙 Moonlight Library — Read. Relax. Escape.
+</footer>
+
+
+<!-- READER -->
+
+<div class="reader" id="reader">
+
+    <div class="reader-top">
+
+        <strong>📖 Moonlight Reader</strong>
+
+        <button
+            class="closeReader"
+            onclick="closeReader()">
+            ✕ Close
+        </button>
+
+    </div>
+
+
+    <article class="reader-content">
+
+        <h1 id="readerTitle"></h1>
+
+        <div
+            class="reader-author"
+            id="readerAuthor">
+        </div>
+
+        <div id="story"></div>
+
+        <div class="reader-controls">
+
+            <button onclick="changeFont(-1)">
+                A−
+            </button>
+
+            <button onclick="changeFont(1)">
+                A+
+            </button>
+
+        </div>
+
+    </article>
+
+</div>
+
+
+<script>
+
+/* =========================
+   BOOK DATA
+========================= */
+
+const genres = [
+    "Fantasy",
+    "Romance",
+    "Mystery",
+    "Science Fiction",
+    "Horror",
+    "Adventure",
+    "History",
+    "Philosophy",
+    "Thriller",
+    "Drama",
+    "Comedy"
+];
+
+
+const icons = {
+    Fantasy:"🐉",
+    Romance:"❤️",
+    Mystery:"🔎",
+    "Science Fiction":"🚀",
+    Horror:"👻",
+    Adventure:"🗺️",
+    History:"🏛️",
+    Philosophy:"🧠",
+    Thriller:"⚡",
+    Drama:"🎭",
+    Comedy:"😂"
+};
+
+
+const colors = [
+    ["#33206b","#9b55c9"],
+    ["#173c63","#3985c4"],
+    ["#642525","#b34f4f"],
+    ["#164d43","#3c9d84"],
+    ["#45235c","#9655b0"],
+    ["#293466","#6575bd"],
+    ["#69431f","#ba8140"]
+];
+
+
+const titleParts = {
+
+    Fantasy:[
+        "The Crystal Kingdom",
+        "The Last Dragon",
+        "Moonlight Sorcerer",
+        "The Forgotten Realm",
+        "Kingdom of Shadows",
+        "The Emerald Crown",
+        "The Wizard's Path"
+    ],
+
+    Romance:[
+        "Letters in the Rain",
+        "Midnight Hearts",
+        "The Summer We Met",
+        "Coffee and Confessions",
+        "When Stars Collide",
+        "Forever Starts Today"
+    ],
+
+    Mystery:[
+        "The Missing Key",
+        "Murder at Midnight",
+        "The Silent Room",
+        "The Locked Door",
+        "The Final Clue",
+        "Death in the Library"
+    ],
+
+    "Science Fiction":[
+        "Beyond the Stars",
+        "Mars Colony",
+        "The Last Android",
+        "Orbit Seven",
+        "Planet Zero",
+        "Echoes of Space"
+    ],
+
+    Horror:[
+        "The House in the Fog",
+        "Whispers in the Dark",
+        "The Empty Basement",
+        "Three Knocks",
+        "The Black Window",
+        "The Haunted Forest"
+    ],
+
+    Adventure:[
+        "Island of Gold",
+        "The Lost Expedition",
+        "Treasure of the Sea",
+        "Journey to the Unknown",
+        "The Hidden Temple",
+        "Beyond the Horizon"
+    ],
+
+    History:[
+        "Empire of the Ancients",
+        "Kings and Queens",
+        "The Medieval World",
+        "Rise of Civilization",
+        "The Ancient City",
+        "Voices from the Past"
+    ],
+
+    Philosophy:[
+        "The Meaning of Life",
+        "The Quiet Mind",
+        "The Search for Truth",
+        "Beyond Reality",
+        "Wisdom in Silence",
+        "The Art of Thinking"
+    ],
+
+    Thriller:[
+        "The Final Hour",
+        "Run Before Midnight",
+        "The Perfect Crime",
+        "No Way Out",
+        "The Hidden Enemy",
+        "The Countdown"
+    ],
+
+    Drama:[
+        "A Life Unwritten",
+        "The Broken Road",
+        "Before We Say Goodbye",
+        "Pieces of Yesterday",
+        "The Family Secret",
+        "The Road Home"
+    ],
+
+    Comedy:[
+        "My Completely Normal Life",
+        "The Worst Vacation Ever",
+        "The Accidental Hero",
+        "Coffee Disaster",
+        "The Great Mistake",
+        "My Strange Neighbors"
+    ]
+};
+
+
+const authors = [
+    "A. Morgan",
+    "L. Carter",
+    "J. Anderson",
+    "M. Wilson",
+    "E. Parker",
+    "S. Bennett",
+    "N. Brooks",
+    "R. Collins",
+    "D. Harrison",
+    "K. Miller"
+];
+
+
+/* =========================
+   GENERATE 1000 BOOKS
+========================= */
+
+let books = [];
+
+for(let i=1;i<=1000;i++){
+
+    const genre =
+        genres[(i-1) % genres.length];
+
+    const names =
+        titleParts[genre];
+
+    const base =
+        names[(i-1) % names.length];
+
+    const version =
+        Math.floor((i-1) / genres.length);
+
+    const title =
+        version === 0
+        ? base
+        : base + " — Volume " + (version+1);
+
+    books.push({
+
+        id:i,
+
+        title:title,
+
+        genre:genre,
+
+        author:
+            authors[(i-1)%authors.length],
+
+        icon:icons[genre],
+
+        colors:
+            colors[(i-1)%colors.length]
+
+    });
+
+}
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+let currentGenre = "All";
+
+const categoryBox =
+    document.getElementById("categories");
+
+
+["All",...genres].forEach(genre=>{
+
+    const button =
+        document.createElement("button");
+
+    button.className =
+        "category" +
+        (genre==="All" ? " active":"");
+
+    button.textContent = genre;
+
+    button.onclick=()=>{
+
+        document
+            .querySelectorAll(".category")
+            .forEach(x=>x.classList.remove("active"));
+
+        button.classList.add("active");
+
+        currentGenre=genre;
+
+        render();
+
+    };
+
+    categoryBox.appendChild(button);
+
+});
+
+
+/* =========================
+   BOOK CARDS
+========================= */
+
+function render(){
+
+    const library =
+        document.getElementById("library");
+
+    const query =
+        document
+        .getElementById("search")
+        .value
+        .toLowerCase();
+
+    const filtered =
+        books.filter(book=>{
+
+            const genreOK =
+                currentGenre==="All" ||
+                book.genre===currentGenre;
+
+            const searchOK =
+                book.title
+                    .toLowerCase()
+                    .includes(query)
+                ||
+                book.author
+                    .toLowerCase()
+                    .includes(query)
+                ||
+                book.genre
+                    .toLowerCase()
+                    .includes(query);
+
+            return genreOK && searchOK;
+
+        });
+
+
+    document.getElementById("bookCount")
+        .textContent=filtered.length;
+
+    library.innerHTML="";
+
+
+    filtered.forEach(book=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className="book";
+
+        card.innerHTML=`
+
+            <div class="book-inner">
+
+                <div class="cover"
+                    style="
+                    background:
+                    linear-gradient(
+                        145deg,
+                        ${book.colors[0]},
+                        ${book.colors[1]}
+                    );
+                    ">
+
+                    <div>
+                        BOOK #${String(book.id)
+                            .padStart(4,"0")}
+                    </div>
+
+                    <div class="icon">
+                        ${book.icon}
+                    </div>
+
+                    <div class="bookTitle">
+                        ${book.title}
+                    </div>
+
+                    <div class="author">
+                        ${book.author}
+                    </div>
+
+                    <div class="genre">
+                        ${book.genre}
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+
+
+        card.onclick=()=>{
+            openBook(book);
+        };
+
+
+        library.appendChild(card);
+
+    });
+
+}
+
+
+document
+    .getElementById("search")
+    .addEventListener("input",render);
+
+
+/* =========================
+   READ BOOK
+========================= */
+
+let fontSize = 19;
+
+
+function openBook(book){
+
+    document
+        .getElementById("reader")
+        .classList.add("show");
+
+    document
+        .getElementById("readerTitle")
+        .textContent=book.title;
+
+    document
+        .getElementById("readerAuthor")
+        .textContent=
+            book.author +
+            " • " +
+            book.genre;
+
+
+    const story =
+        document.getElementById("story");
+
+    story.innerHTML="";
+
+
+    /*
+       Every book gets its own
+       original story based on
+       its genre.
+    */
+
+    for(let chapter=1;chapter<=8;chapter++){
+
+        const section =
+            document.createElement("section");
+
+        section.className="chapter";
+
+        section.innerHTML=`
+
+            <h2>
+                Chapter ${chapter}
+            </h2>
+
+            <p>
+                The night was unusually quiet.
+                ${book.title} had begun long
+                before anyone realized that
+                this would become a story worth
+                remembering.
+            </p>
+
+            <p>
+                ${makeParagraph(book,chapter,1)}
+            </p>
+
+            <p>
+                ${makeParagraph(book,chapter,2)}
+            </p>
+
+            <p>
+                ${makeParagraph(book,chapter,3)}
+            </p>
+
+        `;
+
+        story.appendChild(section);
+
+    }
+
+
+    window.scrollTo(0,0);
+
+}
+
+
+function makeParagraph(book,chapter,number){
+
+    const genreText={
+
+        Fantasy:
+        "Beyond the ancient mountains, strange lights appeared above the forest. The old legends said that whenever those lights returned, a forgotten power would awaken.",
+
+        Romance:
+        "Two people who thought their paths had already been decided discovered that a simple conversation could change everything. Neither of them knew where the moment would lead.",
+
+        Mystery:
+        "A small detail refused to make sense. The evidence pointed in one direction, but the truth seemed to be hiding somewhere nobody had thought to look.",
+
+        "Science Fiction":
+        "The stars outside the window moved silently while the ship continued through the darkness. A signal appeared on the navigation screen, coming from somewhere that should have been empty.",
+
+        Horror:
+        "Something moved behind the door. There was no wind, no footsteps, and no explanation. Then came three slow knocks from the other side.",
+
+        Adventure:
+        "The map showed a path that had disappeared from every modern chart. With the sun beginning to set, there was only one choice: continue forward.",
+
+        History:
+        "Years later, historians would describe the moment as a turning point. But for the people who lived through it, it was simply another morning that unexpectedly changed their lives.",
+
+        Philosophy:
+        "The question seemed simple at first, yet every answer created another question. Perhaps the search itself was more important than reaching a final conclusion.",
+
+        Thriller:
+        "The clock continued moving. There were only a few minutes left, and somewhere nearby was the person responsible. Trusting the wrong person could end everything.",
+
+        Drama:
+        "Old memories returned with surprising strength. Sometimes the hardest part of moving forward was accepting that the past could not be rewritten.",
+
+        Comedy:
+        "Everything should have been perfectly normal. Unfortunately, almost immediately, everything went completely wrong in the funniest possible way."
+
+    };
+
+    return genreText[book.genre] +
+        " Chapter " +
+        chapter +
+        " continued to reveal another piece of the mystery surrounding " +
+        book.title +
+        ". By the end of the evening, the characters understood that their journey had only just begun.";
+
+}
+
+
+function closeReader(){
+
+    document
+        .getElementById("reader")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   FONT SIZE
+========================= */
+
+function changeFont(amount){
+
+    fontSize += amount;
+
+    if(fontSize<14)
+        fontSize=14;
+
+    if(fontSize>30)
+        fontSize=30;
+
+    document
+        .querySelectorAll(".reader-content p")
+        .forEach(p=>{
+            p.style.fontSize =
+                fontSize+"px";
+        });
+
+}
+
+
+/* =========================
+   MUSIC
+========================= */
+
+const music =
+    document.getElementById("music");
+
+const musicBtn =
+    document.getElementById("musicBtn");
+
+musicBtn.onclick=()=>{
+
+    if(music.paused){
+
+        music.play();
+
+        musicBtn.textContent=
+            "⏸ Pause Music";
+
+    }else{
+
+        music.pause();
+
+        musicBtn.textContent=
+            "🎵 Play Music";
+
+    }
+
+};
+
+
+/* START */
+
+render();
+
+</script>
+
+</body>
+</html>
